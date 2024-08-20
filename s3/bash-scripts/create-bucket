@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+echo "creating bucket"
+
+# Check for bucket name
+if [ -z "$1" ]; then
+    echo "There needs to be a bucket name"
+    exit 1
+fi
+
+# check default region: `aws configure list`
+# When creating a bucket in a specific region, the --create-bucket-configuration should include the LocationConstraint only when the region is not the default region (which is us-east-1). For regions other than us-east-1, you must include the --create-bucket-configuration option.
+# https://docs.aws.amazon.com/cli/latest/reference/s3api/create-bucket.html
+aws s3api create-bucket \
+--bucket $1 \
+--create-bucket-configuration="LocationConstraint=us-west-2"

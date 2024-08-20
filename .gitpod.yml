@@ -1,4 +1,7 @@
 tasks:
+  - name: utils
+    before: | 
+        sudo apt-get install tree
   - name: AWS CLI installer
     env: 
       AWS_CLI_AUTO_PROMPT: on-partial
