@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+echo "deploy s3 bucket via CF"
+
+stack_name="cfn-s3-simple"
+
+aws cloudformation deploy \
+--template-file template.yaml \
+--stack-name $stack_name \
+--region us-west-2 \
+--no-execute-changeset # If you want to view the change set before AWS CloudFormation executes it, use the --no-execute-changeset flag.

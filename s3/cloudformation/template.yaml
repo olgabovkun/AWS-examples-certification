@@ -1,0 +1,6 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Simple cloud formation for bucket creation
+Resources:
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    # AWS will generate a random name if we don't supply a BucketName
