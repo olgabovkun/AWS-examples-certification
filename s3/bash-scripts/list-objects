@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "get list objects"
+echo "list objects"
 
 # Check for bucket name
 if [ -z "$1" ]; then

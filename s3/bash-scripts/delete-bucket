@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "deleting bucket"
+echo "delete bucket"
 
 # Check for bucket name
 if [ -z "$1" ]; then

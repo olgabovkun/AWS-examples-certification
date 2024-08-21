@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "sync objects into bucket"
+echo "sync objects"
 
 # Check for bucket name
 if [ -z "$1" ]; then
@@ -28,7 +28,5 @@ for i in {1..5}; do
     
     echo "Created file: $filename"
 done
-
-tree $output_dir
 
 aws s3 sync $output_dir s3://$bucket_name/files
