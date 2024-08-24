@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+echo "get bucket-policy"
+
+aws s3api get-bucket-policy --bucket bucket-policy-example-bovkun1234

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+echo "get object"
+
+# Check for bucket name
+if [ -z "$1" ]; then
+    echo "There needs to be a bucket name"
+    exit 1
+fi
+
+bucket_name=$1
+
+# Check for object key
+if [ -z "$2" ]; then
+    echo "There needs to be a bucket name"
+    exit 1
+fi
+
+object_key=$2
+
+aws s3api get-object --bucket $bucket_name --key $object_key output

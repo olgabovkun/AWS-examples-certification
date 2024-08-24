@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+echo "put bucket-policy"
+
+# Check for bucket name
+if [ -z "$1" ]; then
+    echo "There needs to be a user ARN"
+    echo "use script to get user ARN: aws iam get-user --query 'User.Arn' --output text"
+    exit 1
+fi
+
+user_arn=$1
+
+bucket_name="bucket-policy-example-bovkun1234"
+
+# create a bucket
+aws s3 mb s3://$bucket_name
+
+# put object into bucket
+tempfile="tempfile.txt"
+touch $tempfile
+
+object_key=$(basename $tempfile) 
+
+aws s3api put-object --bucket $bucket_name --key $object_key --body $tempfile
+
+# put object into new secret folder
+aws s3api put-object --bucket $bucket_name --key my-secret-folder/$object_key --body $tempfile
+
+# Define the file name and JSON content with bucket-policy
+file_policy="policy.json"
+json_content=$(cat <<EOF
+{
+   "Statement": [
+      {
+         "Effect": "Allow",
+         "Principal": {
+            "AWS": "$user_arn"
+         },
+         "Action": "s3:GetObject",
+         "Resource": "arn:aws:s3:::$bucket_name/*"
+      },
+      {
+         "Effect": "Deny",
+         "Principal": {
+            "AWS": "$user_arn"
+         },
+         "Action": "s3:GetObject",
+         "Resource": "arn:aws:s3:::$bucket_name/my-secret-folder/*"
+      }
+   ]
+}
+EOF
+)
+
+# Create the file and write the JSON content to it
+echo "$json_content" > "$file_policy"
+
+# put bucket-policy
+aws s3api put-bucket-policy --bucket $bucket_name --policy file://policy.json
+
+# check access to the object from secret folder
+echo "Here we should get AccessDenied"
+../crud-bucket-object/get-object $bucket_name my-secret-folder/$tempfile 
+
+# cleanup
+../crud-bucket-object/delete-objects $bucket_name
+../crud-bucket-object/delete-bucket $bucket_name
+rm $file_policy
+rm $tempfile
