@@ -1,4 +1,4 @@
-create bash files 
+## Create bash files 
 
 - Open the file in your text editor and add the bash at the top. This line tells the system to use the Bash shell to execute the commands in the script. 
 - Use more portable shebang line #!/usr/bin/env that ensures the script runs with a compatible shell
