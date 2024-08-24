@@ -10,7 +10,7 @@ fi
 
 user_arn=$1
 
-bucket_name="bucket-policy-example-bovkun1234"
+bucket_name="bucket-policy-example-test9834"
 
 # create a bucket
 aws s3 mb s3://$bucket_name
