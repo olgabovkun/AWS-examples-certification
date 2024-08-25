@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+echo "delete VPC"
+
+# Check for vpc_id
+if [ -z "$1" ]; then
+    echo "You must provide a vpc_id."
+    exit 1
+fi
+
+VPC_ID=$1
+
+# Check for igw_id
+if [ -n "$2" ]; then
+    IGW_ID=$2
+    
+    echo "Detaching and deleting Internet Gateway (IGW) with ID: $IGW_ID..."
+
+    # Detach IGW
+
+    aws ec2 detach-internet-gateway \
+    --internet-gateway-id $IGW_ID \
+    --vpc-id $VPC_ID
+
+    # Delete IGW
+
+    aws ec2 delete-internet-gateway \
+    --internet-gateway-id $IGW_ID
+
+    echo "Internet Gateway detached and deleted."
+fi
+
+# Check for subnet_id
+if [ -n "$3" ]; then
+    SUBNET_ID=$3
+    
+    echo "Deleting Subnet with ID: $SUBNET_ID..."
+
+    # Delete SUBNET_ID
+
+    aws ec2 delete-subnet --subnet-id $SUBNET_ID
+
+    echo "Subnet deleted."
+fi
+
+# Delete VPC
+
+echo "Attempting to delete VPC with ID: $VPC_ID..."
+
+DELETE_VPC_OUTPUT=$(aws ec2 delete-vpc --vpc-id $VPC_ID 2>&1)
+
+# Check if there was a DependencyViolation error
+if echo "$DELETE_VPC_OUTPUT" | grep -q "DependencyViolation"; then
+    echo "Specify the IGW_ID to detach and delete the Internet Gateway and SUBNET_ID to delete Subnet: ./delete-vpc VPC_ID IGW_ID SUBNET_ID"
+else
+    echo "VPC deleted successfully."
+fi
