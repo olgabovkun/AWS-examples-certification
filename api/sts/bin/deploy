@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+echo "deploy  via CF"
+
+aws cloudformation deploy \
+--template-file template.yaml \
+--stack-name my-sts-stack \
+--capabilities CAPABILITY_IAM
