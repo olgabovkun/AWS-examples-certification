@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "delete VPC"
+echo "delete VPC, IGW and SUBNET"
 
 # Check for vpc_id
 if [ -z "$1" ]; then
@@ -23,8 +23,7 @@ if [ -n "$2" ]; then
 
     # Delete IGW
 
-    aws ec2 delete-internet-gateway \
-    --internet-gateway-id $IGW_ID
+    aws ec2 delete-internet-gateway --internet-gateway-id $IGW_ID
 
     echo "Internet Gateway detached and deleted."
 fi

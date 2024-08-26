@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "create VPC"
+echo "create VPC, IGW and SUBNET"
 
 # Create VPC
 
@@ -21,7 +21,7 @@ aws ec2 modify-vpc-attribute \
 # Create IGW
 
 igw_id=$(aws ec2 create-internet-gateway \
---tag-specifications 'ResourceType=internet-gateway,Tags=[{Key=Name,Value=MyIgw}]' \
+--tag-specifications 'ResourceType=internet-gateway,Tags=[{Key=Name,Value=MyTestIgw}]' \
 --query InternetGateway.InternetGatewayId \
 --output text)
 
