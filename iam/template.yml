@@ -1,0 +1,36 @@
+Resources:
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html
+  MyManagedPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: MyCustomManagedPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: CustomPolicyStatement
+            Effect: Allow
+            Action:
+              - 's3:ListBucket'
+              - 's3:GetObject'
+            Resource:
+              - arn:aws:s3:::my-bucket-name
+              - arn:aws:s3:::my-bucket-name/*
+
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-user.html
+  MyUserName:
+    Type: AWS::IAM::User
+    Properties:
+      ManagedPolicyArns: 
+        - !Ref MyManagedPolicy  # Custom Managed Policy ARN
+        - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess # Inline Policy
+      Policies:
+        - PolicyName: MyInlinePolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: IamListAccess
+                Effect: Allow
+                Action:
+                - 'iam:ListRoles'
+                - 'iam:ListUsers'
+                Resource: '*'
