@@ -1,6 +1,6 @@
 # AWS-examples-certification
 
-This repository contains various AWS code examples to help prepare for AWS certification.
+This repository contains various AWS code examples to help prepare for AWS Solutions Architect Associate Certification (SAA-C03).
 
 ## Overview
 <!-- https://www.gitpod.io/docs/introduction/getting-started  -->
