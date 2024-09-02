@@ -4,7 +4,7 @@
       {
         "Effect": "Allow",
         "Action": "sts:AssumeRole",
-        "Resource": "arn:aws:iam::429987468922:role/StsExampleRole"
+        "Resource": "arn:aws:iam::123456789012:role/StsExampleRole"
       }
     ]
   }

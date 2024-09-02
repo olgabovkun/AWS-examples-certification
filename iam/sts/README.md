@@ -133,12 +133,12 @@ Update role-arn with the ARN for created Role
 ```sh
 aws sts assume-role \
 --profile sts-example \
---role-arn arn:aws:iam::429987468922:role/StsExampleRole \
+--role-arn arn:aws:iam::123456789012:role/StsExampleRole \
 --role-session-name StsExampleSession
 ```
 
 ## Configure profile with temperarly credentials
-Update sts-example profile and insert session token
+Update sts-example profile and insert session token (aws_session_token=)
 ```sh
 nano ~/.aws/config
 nano ~/.aws/credentials
