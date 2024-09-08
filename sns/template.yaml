@@ -1,0 +1,5 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Create SNS topic
+Resources:
+  MySNSTopicCF:
+  Type: AWS::SNS::Topic

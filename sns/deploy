@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+echo "deploy sns via CF"
+
+STACK_NAME="my-sns-stack"
+
+aws cloudformation deploy \
+--template-file template.yaml \
+--stack-name $STACK_NAME \
+--capabilities CAPABILITY_IAM
