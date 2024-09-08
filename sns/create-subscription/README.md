@@ -23,7 +23,9 @@ aws sns subscribe \
 * **Confirm Subscription**: Click the confirmation link in the email to complete the subscription process
 
 ## Test
-Publish a message to your SNS topic:
+Publish a message to your SNS topic.
+
+Replace `topic-arn` with your topic's ARN:
 ```sh
 aws sns publish \
 --topic-arn "arn:aws:sns:us-west-2:123456789012:my-topic" \
@@ -51,8 +53,8 @@ List all topics to get the Topic ARNs:
 aws sns list-topics
 ```
 
-#### Delete CLI created topic:
-Replace topic-arn with your topic's ARN
+#### Delete CLI created topic
+Replace `topic-arn` with your topic's ARN
 ```sh
 aws sns delete-topic \
 --topic-arn "arn:aws:sns:us-west-2:123456789012:my-topic"
