@@ -1,0 +1,11 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Create SNS topic
+Resources:
+  MyQueue: 
+    Type: AWS::SQS::Queue
+    Properties: 
+      QueueName: "FifoQueue.fifo" # To create a FIFO queue, the name of your FIFO queue must end with the .fifo suffix
+      FifoQueue: true
+      ContentBasedDeduplication: true  # Optional: Enables deduplication based on message content
+      # If you want to use deduplication by a specific ID instead of content-based, set this to false and specify the DeduplicationScope property.
+
