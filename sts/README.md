@@ -2,8 +2,10 @@
 AWS Security Token Service (STS) action that allows one role or user to temporarily assume the permissions of another IAM role.
 
 ## Init
+```sh
 cd api/sts
 chmod +x bin/deploy
+```
 
 ## Create a user with no permissions
 

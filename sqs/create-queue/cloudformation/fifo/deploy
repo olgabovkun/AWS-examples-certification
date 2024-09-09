@@ -4,6 +4,6 @@ echo "deploy sqs via CF"
 STACK_NAME="my-fifo-sqs-stack"
 
 aws cloudformation deploy \
---template-file template.yaml \
+--template-file fifo/template.yaml \
 --stack-name $STACK_NAME \
 --capabilities CAPABILITY_IAM
