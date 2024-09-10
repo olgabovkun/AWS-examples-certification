@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+echo "Visibility Timeout example"
+
+QUEUE_NAME="VisibilityTimeoutQueue"
+MESSAGE_BODY="Test message for visibility timeout"
+VISIBILITY_TIMEOUT=30
+
+# Function to clean up resources (delete queue)
+cleanup() {
+  echo "Cleaning up resources..."
+  if [ -n "$QUEUE_URL" ]; then
+    echo "Deleting the queue: $QUEUE_URL"
+    aws sqs delete-queue --queue-url "$QUEUE_URL"
+  fi
+  exit 1
+}
+
+# Create SQS queue
+echo "Creating SQS queue: $QUEUE_NAME"
+QUEUE_URL=$(aws sqs create-queue \
+--queue-name $QUEUE_NAME \
+--attributes VisibilityTimeout=60 \
+--output text \
+--query 'QueueUrl')
+
+if [ -z "$QUEUE_URL" ]; then
+  echo "Failed to create queue"
+  exit 1
+fi
+
+echo "Created queue: $QUEUE_URL"
+
+# Send a message to the queue
+echo "Sending message to the queue..."
+aws sqs send-message \
+--queue-url "$QUEUE_URL" \
+--message-body "$MESSAGE_BODY"
+if [ $? -ne 0 ]; then
+  echo "Failed to send message."
+  cleanup
+fi
+
+# Receive the message and capture the receipt handle
+echo "Receiving message..."
+RECEIVE_OUTPUT=$(aws sqs receive-message \
+--queue-url $QUEUE_URL \
+--visibility-timeout $VISIBILITY_TIMEOUT \
+--wait-time-seconds 5 \
+--output json)
+
+RECEIPT_HANDLE=$(echo $RECEIVE_OUTPUT | jq -r '.Messages[0].ReceiptHandle')
+MESSAGE=$(echo $RECEIVE_OUTPUT | jq -r '.Messages[0].Body')
+
+# Check if we received a message
+if [ -z "$RECEIPT_HANDLE" ]; then
+  echo "No message received."
+  cleanup
+fi
+
+echo "Received message: $MESSAGE"
+
+# Attempt to receive the message again before the visibility timeout expires
+echo "Trying to receive the message again before the visibility timeout expires (should not be able to receive)..."
+RECEIVE_AGAIN_OUTPUT=$(aws sqs receive-message \
+--queue-url $QUEUE_URL \
+--wait-time-seconds 5 \
+--output json)
+
+MESSAGE_AGAIN=$(echo $RECEIVE_AGAIN_OUTPUT | jq -r '.Messages[0].Body')
+
+if [ -z "$MESSAGE_AGAIN" ]; then
+  echo "Message is still being processed (within visibility timeout), cannot receive it again"
+else
+  echo "Unexpected: Received the message again: $MESSAGE_AGAIN"
+fi
+
+# Attempt to receive the same message again after the timeout expires
+echo "Waiting for $VISIBILITY_TIMEOUT seconds to allow message visibility to expire..."
+sleep $VISIBILITY_TIMEOUT
+
+echo "Attempting to receive the message again after the timeout expires..."
+RECEIVE_AGAIN_OUTPUT=$(aws sqs receive-message \
+--queue-url $QUEUE_URL \
+--wait-time-seconds 5 \
+--output json)
+MESSAGE_AGAIN=$(echo $RECEIVE_AGAIN_OUTPUT | jq -r '.Messages[0].Body')
+
+if [ -z "$MESSAGE_AGAIN" ]; then
+  echo "No message received again. Message was deleted or processed by another consumer."
+else
+  echo "Received the message again: $MESSAGE_AGAIN"
+fi
+
+# Clean up
+cleanup
