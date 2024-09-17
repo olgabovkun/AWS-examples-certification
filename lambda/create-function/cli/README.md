@@ -1,11 +1,11 @@
 # Create Lambda
-Here’s an example of how to create a simple AWS Lambda function using the AWS CLI. The function will be written in Python and deployed from a local file.
+Here’s an example of how to create a simple AWS Lambda function using AWS CLI. The function will be written in Python and deployed from a local file.
 
 ## Init
 cd lambda/create-function/cli
 
 ## Create a Role for Lambda
-First, you need to create an IAM role with the appropriate permissions for your Lambda function.
+First, you need to create an IAM role with the appropriate permissions for Lambda function.
 ```sh
 aws iam create-role \
 --role-name lambda-execution-role \
@@ -66,13 +66,13 @@ cat output.txt
 ```
 
 ## Cleanup
-### Delete the Lambda function
+#### Delete the Lambda function
 ```sh
 aws lambda delete-function \
 --function-name python-lambda-function
 ```
 
-### Delete IAM role
+#### Delete IAM role
 AWS IAM requires you to detach all policies from a role before you can delete the role.
 
 First, check which policies are attached to the role. This command will return a list of attached policies. Copy <PolicyArn>.
@@ -95,13 +95,13 @@ aws iam delete-role \
 --role-name lambda-execution-role
 ```
 
-### Delete a log group
+#### Delete a log group
 ```sh
 aws logs delete-log-group \
 --log-group-name /aws/lambda/python-lambda-function
 ```
 
-### Delete generated zip file and output
+#### Delete generated zip file and output
 ```sh
 rm function.zip
 ```

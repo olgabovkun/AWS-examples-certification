@@ -11,12 +11,15 @@ chmod +x bin/deploy
 
 Creates a new IAM user:
 ```sh
-aws iam create-user --user-name sts-test-user
+aws iam create-user \
+--user-name sts-test-user
 ```
 
 Create secret access key and corresponding AWS access key ID for the specified user:
 ```sh
-aws iam create-access-key --user-name sts-test-user --output table
+aws iam create-access-key \
+--user-name sts-test-user \
+--output table
 ```
 
 Copy the AccessKeyId and SecretAccessKey:
@@ -31,12 +34,14 @@ open ~/.aws/credentials
 
 Check identity:
 ```sh
-aws sts get-caller-identity --profile sts
+aws sts get-caller-identity \
+--profile sts
 ```
 
 Check that this user don't have any permission:
 ```sh
-aws s3 ls s3://sts-example-56289 --profile sts
+aws s3 ls s3://sts-example-56289 \
+--profile sts
 ```
 > An error occurred (AccessDenied) when calling the ListBuckets operation
 
@@ -92,25 +97,29 @@ aws_session_token = EXAMPLESESSIONTOKEN
 
 Check assumed sts identity. Arn should have '/role-session-name' that we defined before
 ```sh
-aws sts get-caller-identity --profile assumed
+aws sts get-caller-identity \
+--profile assumed
 ```
 
 ## Test
 For 'sts' profile it should return AccessDenied
 ```sh
-aws s3 ls s3://sts-example-56289 --profile sts
+aws s3 ls s3://sts-example-56289 \
+--profile sts
 ```
 
 For the 'assumed' profile, it should work. 
 Get objects from the S3 --bucket sts-example-56289. The bucket is empty since we haven’t added anything yet, but you can manually upload a file through the AWS Console to test it
 ```sh
-aws s3 ls s3://sts-example-56289 --profile assumed
+aws s3 ls s3://sts-example-56289 \
+--profile assumed
 ```
 
 ## Cleanup
 Delete Cloudformation stack:
 ```sh
-aws cloudformation delete-stack --stack-name my-sts-stack
+aws cloudformation delete-stack \
+--stack-name my-sts-stack
 ```
 
 Delete user policy:
@@ -135,7 +144,8 @@ aws iam delete-access-key \
 
 Delete user:
 ```sh
-aws iam delete-user --user-name sts-test-user
+aws iam delete-user \
+--user-name sts-test-user
 ```
 
 As the last step, if you are working locally, delete the .aws credentials file. If you are working through gitpod, it will be deleted automatically after stopping the workspace
