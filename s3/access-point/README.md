@@ -1,9 +1,11 @@
 # Access Point
-In this example we are going to create bucket and access point using AWS CLI
+In this example, we are going to create a bucket and access point using the AWS CLI.
 
 ## Init
 ```sh
 cd s3/access-point/
+```
+```sh
 export BUCKET_NAME=my-test-access-point-bucket
 export REGION=us-west-2
 export ACCOUNT_ID=<your-account-id>
@@ -19,7 +21,7 @@ aws s3api create-bucket \
 --create-bucket-configuration LocationConstraint=$REGION
 ```
 
-If you getting exception `An error occurred (BucketAlreadyExists)` create a new bucket name.
+If you receive the exception "An error occurred (BucketAlreadyExists)", try creating a bucket with a new name.
 
 ## Create Access Point 
 Creating an S3 Access Point associated with this bucket. This access point will provide controlled access to the data in the bucket:
