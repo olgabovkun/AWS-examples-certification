@@ -31,7 +31,7 @@ ACCESS_POINT_ARN=$(aws s3control create-access-point \
 --bucket $BUCKET_NAME \
 --name $ACCESS_POINT_NAME \
 --region $REGION \
---query 'AccessPoint.Arn' \
+--query 'AccessPointArn' \
 --output text)
 ```
 
@@ -61,7 +61,7 @@ aws s3control put-access-point-policy \
                "AWS": "arn:aws:iam::$ACCOUNT_ID:user/$USER_NAME"
             },
             "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:$REGION:$ACCOUNT_ID:accesspoint/$ACCESS_POINT_NAME/object/*"
+            "Resource": "$ACCESS_POINT_ARN/object/*"
         }
     ]
 }
@@ -74,7 +74,7 @@ EOF
 Use the access point to get the object. If the command is successful, it confirms you have access through the access point:
 ```sh
 aws s3api get-object \
---bucket arn:aws:s3:$REGION:$ACCOUNT_ID:accesspoint/$ACCESS_POINT_NAME \
+--bucket $ACCESS_POINT_ARN \
 --key testfile.txt downloaded-file.txt
 ```
 
@@ -98,7 +98,7 @@ aws s3control put-access-point-policy \
                "AWS": "arn:aws:iam::$ACCOUNT_ID:user/$USER_NAME"
             },
             "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:$REGION:$ACCOUNT_ID:accesspoint/$ACCESS_POINT_NAME/object/*"
+            "Resource": "$ACCESS_POINT_ARN/object/*"
         }
     ]
 }
@@ -110,13 +110,8 @@ EOF
 Attempt to access the file through the access point again. This time, you should receive an error indicating that access is denied:
 ```sh
 aws s3api get-object \
---bucket arn:aws:s3:$REGION:$ACCOUNT_ID:accesspoint/$ACCESS_POINT_NAME \
+--bucket $ACCESS_POINT_ARN \
 --key testfile.txt downloaded-file.txt
-```
-
-Verify the Downloaded File:
-```sh
-cat downloaded-file.txt
 ```
 
 ## Clean up
@@ -152,4 +147,5 @@ unset REGION
 unset ACCOUNT_ID
 unset ACCESS_POINT_NAME
 unset USER_NAME
+unset ACCESS_POINT_ARN
 ```
