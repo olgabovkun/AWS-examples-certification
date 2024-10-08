@@ -24,9 +24,7 @@ aws sns subscribe \
 * **Confirm Subscription**: Click the confirmation link in the email to complete the subscription process
 
 ## Test
-Publish a message to your SNS topic.
-
-Replace `topic-arn` with your topic's ARN:
+Publish a message to your SNS topic. Replace `topic-arn` with your topic's ARN:
 
 #### Publish a Thriller Book Message
 ```sh
