@@ -27,7 +27,9 @@ aws sqs get-queue-url \
 --queue-name StandardQueue
 ```
 
-Update `queue-url` and delete Queue:
+Copy the queue URL from the previous step and insert it into the following `--queue-url` parameter.
+
+Update `queue-url`, then delete the Queue:
 ```sh
 aws sqs delete-queue \
 --queue-url https://sqs.region.amazonaws.com/account-id/StandardQueue
@@ -40,7 +42,9 @@ aws sqs get-queue-url \
 --queue-name FifoQueue.fifo
 ```
 
-Update `queue-url` and delete Queue:
+Copy the queue URL from the previous step and insert it into the following `--queue-url` parameter.
+
+Update `queue-url`, then delete the Queue:
 ```sh
 aws sqs delete-queue \
 --queue-url https://sqs.region.amazonaws.com/account-id/FifoQueue.fifo
