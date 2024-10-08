@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+echo "create lambda"
+
+# Set variables
+ROLE_NAME="lambda-execution-role"
+FUNCTION_NAME="python-lambda-function"
+PYTHON_FILE_PATH="../lambda-function.py"
+ZIP_FILE="function.zip"
+OUTPUT_FILE="output.txt"
+
+# Step 1: Create a Role for Lambda
+echo "Creating IAM role for Lambda..."
+ROLE_ARN=$(aws iam create-role \
+--role-name $ROLE_NAME \
+--assume-role-policy-document '{
+    "Version": "2012-10-17",
+    "Statement": [{
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }]
+  }' \
+--query 'Role.Arn' \
+--output text)
+
+echo "Role ARN: $ROLE_ARN"
+
+# Step 2: Attach AWSLambdaBasicExecutionRole policy
+echo "Attaching AWSLambdaBasicExecutionRole policy..."
+aws iam attach-role-policy \
+--role-name $ROLE_NAME \
+--policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+# Step 3: Create a Deployment Package
+echo "Zipping Python file into a deployment package..."
+zip $ZIP_FILE $PYTHON_FILE_PATH
+
+# Sometimes, the IAM role's trust relationship takes time to propagate. Add a sleep delay before creating the Lambda function to allow IAM changes to take effect
+echo "Waiting for IAM role to propagate..."
+sleep 10
+
+# Step 4: Create the Lambda Function
+echo "Creating Lambda function..."
+aws lambda create-function \
+--function-name $FUNCTION_NAME \
+--zip-file fileb://$ZIP_FILE \
+--handler lambda-function.handler \
+--runtime python3.9 \
+--role $ROLE_ARN

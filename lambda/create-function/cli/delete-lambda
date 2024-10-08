@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+echo "delete lambda"
+
+# Set variables
+ROLE_NAME="lambda-execution-role"
+FUNCTION_NAME="python-lambda-function"
+LOG_GROUP_NAME="/aws/lambda/$FUNCTION_NAME"
+ZIP_FILE="function.zip"
+OUTPUT_FILE="output.txt"
+
+# Step 1: Delete the Lambda function
+echo "Deleting Lambda function..."
+aws lambda delete-function \
+--function-name $FUNCTION_NAME
+
+# Step 2: Detach the policy from the role
+echo "Detaching policy from role..."
+aws iam detach-role-policy \
+--role-name $ROLE_NAME \
+--policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+# Step 3: Delete the IAM role
+echo "Deleting IAM role..."
+aws iam delete-role \
+--role-name $ROLE_NAME
+
+# Step 4: Delete the log group
+echo "Deleting log group..."
+aws logs delete-log-group \
+--log-group-name $LOG_GROUP_NAME
+
+# Step 5: Delete zip
+echo "Deleting generated zip..."
+rm $ZIP_FILE
+
+echo "Lambda cleanup completed."
