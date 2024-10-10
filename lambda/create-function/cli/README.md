@@ -1,8 +1,16 @@
 # Create Lambda
 Here’s an example of how to create a simple AWS Lambda function using AWS CLI. The function will be written in Python and deployed from a local file.
 
+> You can run the step-by-step commands or use a bash script for creating and deleting a Lambda function (before running the script, ensure that it has executable permissions)
+> 
+> ./create-lambda
+> 
+> ./delete-lambda
+
 ## Init
+```
 cd lambda/create-function/cli
+```
 
 ## Create a Role for Lambda
 First, you need to create an IAM role with the appropriate permissions for Lambda function.
